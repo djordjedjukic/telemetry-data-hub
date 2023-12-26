@@ -1,4 +1,4 @@
-package com.logineko.TelemetryDataHub.model;
+package com.logineko.TelemetryDataHub.model.domain;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -7,8 +7,6 @@ import lombok.Setter;
 @Setter
 public class Combine extends Machine {
     private double groundSpeed;
-    private int engineSpeed;
-    private int engineLoad;
     private int drumSpeed;
     private int fanSpeed;
     private int rotorStrawWalkerSpeed;

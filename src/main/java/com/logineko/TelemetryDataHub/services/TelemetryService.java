@@ -1,8 +1,8 @@
 package com.logineko.TelemetryDataHub.services;
 
-import com.logineko.TelemetryDataHub.model.Combine;
-import com.logineko.TelemetryDataHub.model.Machine;
-import com.logineko.TelemetryDataHub.model.Tractor;
+import com.logineko.TelemetryDataHub.model.domain.Combine;
+import com.logineko.TelemetryDataHub.model.domain.Machine;
+import com.logineko.TelemetryDataHub.model.domain.Tractor;
 import com.logineko.TelemetryDataHub.model.csvModel.CombineData;
 import com.logineko.TelemetryDataHub.model.csvModel.TractorData;
 import com.logineko.TelemetryDataHub.utils.Constants;

@@ -67,6 +67,11 @@
 			<artifactId>opencsv</artifactId>
 			<version>5.6</version>
 		</dependency>
+		<dependency>
+			<groupId>net.ravendb</groupId>
+			<artifactId>ravendb</artifactId>
+			<version>5.4.2</version> <!-- Make sure to use the latest version -->
+		</dependency>
 	</dependencies>
 
 	<build>

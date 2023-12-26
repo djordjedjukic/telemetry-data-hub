@@ -1,6 +1,7 @@
 package com.logineko.TelemetryDataHub.controller;
 
 import com.logineko.TelemetryDataHub.services.ITelemetryService;
+import com.logineko.TelemetryDataHub.utils.filter.FiltersRegistry;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,6 +37,6 @@ public class TelemetryController {
 
     @GetMapping("/test")
     public ResponseEntity<?> getAll() {
-        return ResponseEntity.ok("Hello World");
+        return ResponseEntity.ok(FiltersRegistry.getPossibleFilters());
     }
 }
