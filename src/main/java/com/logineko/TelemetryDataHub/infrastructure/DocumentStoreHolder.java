@@ -4,10 +4,13 @@ import com.logineko.TelemetryDataHub.model.domain.Machine;
 import net.ravendb.client.documents.DocumentStore;
 import net.ravendb.client.documents.IDocumentStore;
 import net.ravendb.client.documents.conventions.DocumentConventions;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
+@Configuration
 public class DocumentStoreHolder {
     private static class DocumentStoreContainer {
-        public static final IDocumentStore store = new DocumentStore("http://localhost:8080", "LoginEko");
+        public static final IDocumentStore store = new DocumentStore("http://localhost:8082", "LoginEko");
 
         static {
             DocumentConventions conventions = store.getConventions();
@@ -24,6 +27,7 @@ public class DocumentStoreHolder {
         }
     }
 
+    @Bean
     public static IDocumentStore getStore() {
         return DocumentStoreContainer.store;
     }

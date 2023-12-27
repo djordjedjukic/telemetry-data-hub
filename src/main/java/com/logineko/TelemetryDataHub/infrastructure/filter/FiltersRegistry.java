@@ -3,15 +3,18 @@ package com.logineko.TelemetryDataHub.infrastructure.filter;
 import com.logineko.TelemetryDataHub.model.domain.Combine;
 import com.logineko.TelemetryDataHub.model.domain.Machine;
 import com.logineko.TelemetryDataHub.model.domain.Tractor;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
+@Configuration
 public class FiltersRegistry {
 
-    public static List<Filter> getPossibleFilters() {
+    @Bean
+    public List<Filter> getPossibleFilters() {
         List<Filter> filters = new ArrayList<>();
         List<Field> fields = new ArrayList<>();
 

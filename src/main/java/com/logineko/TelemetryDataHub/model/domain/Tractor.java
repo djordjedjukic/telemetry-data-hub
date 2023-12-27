@@ -1,11 +1,11 @@
 package com.logineko.TelemetryDataHub.model.domain;
 
 import com.logineko.TelemetryDataHub.model.csvModel.TractorData;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter
-@Setter
+@Data
 public class Tractor extends Machine {
     private double fuelConsumption;
     private double groundSpeedGearbox;

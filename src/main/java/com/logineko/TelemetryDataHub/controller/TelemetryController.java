@@ -20,29 +20,30 @@ public class TelemetryController {
     private final ITelemetryService telemetryService;
 
     @PostMapping("/import")
-    public String importTelemetryData(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<?> importTelemetryData(@RequestParam("file") MultipartFile file) {
         if (file.isEmpty()) {
-            return "No file selected";
+            return new ResponseEntity<>("No file selected", HttpStatus.BAD_REQUEST);
         }
 
         if (!file.getOriginalFilename().endsWith(".csv")) {
-            return "Invalid file type. Only CSV files are allowed.";
+            return new ResponseEntity<>("Invalid file type. Only CSV files are allowed.", HttpStatus.BAD_REQUEST);
         }
 
         try {
             String fileName = file.getOriginalFilename();
             telemetryService.importData(file.getInputStream(), fileName);
-            return "File uploaded successfully: " + fileName;
+            return new ResponseEntity<>("File uploaded successfully: " + fileName, HttpStatus.BAD_REQUEST);
+
         } catch (Exception e) {
             e.printStackTrace();
-            return "Something went wrong. Please try again.";
+            return new ResponseEntity<>("Something went wrong. Please try again.", HttpStatus.BAD_REQUEST);
         }
     }
 
 
     @GetMapping("/test")
     public ResponseEntity<?> getAll() {
-        return ResponseEntity.ok(FiltersRegistry.getPossibleFilters());
+        return ResponseEntity.ok(telemetryService.getPossibleFilters());
     }
 
     @PostMapping("/filter")
@@ -55,7 +56,7 @@ public class TelemetryController {
             return new ResponseEntity<>("Invalid filters: " + String.join(", ", notValidFilters), HttpStatus.BAD_REQUEST);
         } else {
             TelemetryResponse response = telemetryService.getTelemetryData(filterConditions);
-            return new ResponseEntity<>(response, HttpStatus.OK);
+            return ResponseEntity.ok(response);
         }
     }
 }

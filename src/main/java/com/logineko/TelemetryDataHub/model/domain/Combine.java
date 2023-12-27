@@ -1,10 +1,8 @@
 package com.logineko.TelemetryDataHub.model.domain;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
+@Data
 public class Combine extends Machine {
     private double groundSpeed;
     private int drumSpeed;

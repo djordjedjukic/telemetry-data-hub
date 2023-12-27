@@ -1,5 +1,6 @@
 package com.logineko.TelemetryDataHub.services;
 
+import com.logineko.TelemetryDataHub.infrastructure.filter.Filter;
 import com.logineko.TelemetryDataHub.model.csvModel.CombineData;
 import com.logineko.TelemetryDataHub.model.csvModel.TractorData;
 import com.logineko.TelemetryDataHub.model.domain.Combine;
@@ -14,6 +15,7 @@ import com.logineko.TelemetryDataHub.infrastructure.DocumentStoreHolder;
 import com.logineko.TelemetryDataHub.infrastructure.filter.FiltersRegistry;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
+import net.ravendb.client.documents.IDocumentStore;
 import net.ravendb.client.documents.session.IDocumentQuery;
 import net.ravendb.client.documents.session.IDocumentSession;
 import org.springframework.stereotype.Service;
@@ -28,6 +30,15 @@ import java.util.Objects;
 @Service
 public class TelemetryService implements ITelemetryService {
 
+    private final FiltersRegistry filtersRegistry;
+    private final IDocumentStore store;
+
+    public TelemetryService(FiltersRegistry filtersRegistry, IDocumentStore store) {
+        this.filtersRegistry = filtersRegistry;
+        this.store = store;
+    }
+
+
     @Override
     public void importData(InputStream file, String fileName) throws Exception {
 
@@ -38,7 +49,7 @@ public class TelemetryService implements ITelemetryService {
 
 
         Machine machine = null;
-        try (IDocumentSession session = DocumentStoreHolder.getStore().openSession()) {
+        try (IDocumentSession session = store.openSession()) {
             if (fileName.startsWith(Constants.TRACTOR_DATA_FILE_NAME)) {
                 for (Object obj : machines) {
                     TractorData data = (TractorData) obj;
@@ -79,11 +90,15 @@ public class TelemetryService implements ITelemetryService {
         }
     }
 
+    public List<Filter> getPossibleFilters() {
+        return filtersRegistry.getPossibleFilters();
+    }
+
     public List<String> validateFilters(List<FilterCondition> filters) {
         var notValidFilters = new ArrayList<String>();
 
         for (FilterCondition filter : filters) {
-            if (FiltersRegistry.getPossibleFilters()
+            if (filtersRegistry.getPossibleFilters()
                     .stream()
                     .anyMatch(f -> f.getFieldName().equals(filter.getFieldName()) &&
                             f.getPossibleOperations().contains(filter.getOperator()))) {
@@ -98,7 +113,7 @@ public class TelemetryService implements ITelemetryService {
 
     public TelemetryResponse getTelemetryData(List<FilterCondition> filterConditions) {
         TelemetryResponse response = new TelemetryResponse();
-        try (IDocumentSession session = DocumentStoreHolder.getStore().openSession()) {
+        try (IDocumentSession session = store.openSession()) {
 
             IDocumentQuery<Machine> query = session.query(Machine.class);
 
