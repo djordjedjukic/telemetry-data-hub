@@ -9,12 +9,12 @@ import java.util.List;
 @Setter
 public class Filter {
     private String FriendlyName;
-    private String PropertyName;
+    private String FieldName;
     private List<String> PossibleOperations;
 
-    public Filter(String friendlyName, String propertyName, List<String> possibleOperations) {
+    public Filter(String friendlyName, String fieldName, List<String> possibleOperations) {
         this.FriendlyName = friendlyName;
-        this.PropertyName = propertyName;
+        this.FieldName = fieldName;
         this.PossibleOperations = possibleOperations;
     }
 }

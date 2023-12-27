@@ -5,15 +5,27 @@ import com.logineko.TelemetryDataHub.model.domain.Machine;
 import com.logineko.TelemetryDataHub.model.domain.Tractor;
 import com.logineko.TelemetryDataHub.model.csvModel.CombineData;
 import com.logineko.TelemetryDataHub.model.csvModel.TractorData;
+import com.logineko.TelemetryDataHub.model.dto.FilterCondition;
+import com.logineko.TelemetryDataHub.model.dto.telemetry.CombineDto;
+import com.logineko.TelemetryDataHub.model.dto.telemetry.TelemetryResponse;
+import com.logineko.TelemetryDataHub.model.dto.telemetry.TractorDto;
 import com.logineko.TelemetryDataHub.utils.Constants;
 import com.logineko.TelemetryDataHub.utils.DocumentStoreHolder;
+import com.logineko.TelemetryDataHub.utils.filter.FiltersRegistry;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
+import net.ravendb.client.documents.session.IDocumentQuery;
 import net.ravendb.client.documents.session.IDocumentSession;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -22,23 +34,105 @@ public class TelemetryService implements ITelemetryService {
     @Override
     public void importData(InputStream file, String fileName) throws Exception {
 
-        List<?> data = readCsv(file, fileName);
+        List<?> machines = readCsv(file, fileName);
+
+        machines = machines.subList(0, 2);
+        SimpleDateFormat formatter = new SimpleDateFormat("MMM dd, yyyy, hh:mm:ss a");
+
 
         Machine machine = null;
-
-        if (fileName.startsWith(Constants.TRACTOR_DATA_FILE_NAME)) {
-            machine = new Tractor();
-        } else if (fileName.startsWith(Constants.COMBINE_DATA_FILE_NAME)) {
-            machine = new Combine();
-        }
-
-        //save to db
         try (IDocumentSession session = DocumentStoreHolder.getStore().openSession()) {
-            session.store(machine);
+            if (fileName.startsWith(Constants.TRACTOR_DATA_FILE_NAME)) {
+                for (Object obj : machines) {
+                    TractorData data = (TractorData) obj;
+                    machine = new Tractor();
+                    machine.setMachineType("Tractor");
+                    machine.setEngineLoad(Double.parseDouble(data.getEngineLoad()));
+                    machine.setEngineSpeed(Double.parseDouble(data.getEngineSpeed()));
+                    machine.setLatitude(Double.parseDouble(data.getGpsLatitude()));
+                    machine.setLongitude(Double.parseDouble(data.getGpsLongitude()));
+                    machine.setSerialNumber(data.getSerialNumber());
+                    machine.setTotalWorkingHours(Double.parseDouble(data.getTotalWorkingHoursCounter()));
+                    machine.setTimestamp(formatter.parse(data.getDateTime()));
+
+                    session.store(machine);
+
+                }
+            } else if (fileName.startsWith(Constants.COMBINE_DATA_FILE_NAME)) {
+                for (Object obj : machines) {
+                    CombineData data = (CombineData) obj;
+                    machine = new Combine();
+                    machine.setMachineType("Combine");
+                    machine.setEngineLoad(Double.parseDouble(data.getEngineLoad()));
+                    machine.setEngineSpeed(Double.parseDouble(data.getEngineSpeed()));
+                    machine.setLatitude(Double.parseDouble(data.getGpsLatitude()));
+                    machine.setLongitude(Double.parseDouble(data.getGpsLongitude()));
+                    machine.setSerialNumber(data.getSerialNumber());
+                    machine.setTotalWorkingHours(Double.parseDouble(data.getTotalWorkingHoursCounter()));
+                    machine.setTimestamp(formatter.parse(data.getDateTime()));
+
+                    session.store(machine);
+                }
+            }
             session.saveChanges();
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public List<String> validateFilters(List<FilterCondition> filters) {
+        var notValidFilters = new ArrayList<String>();
+
+        for (FilterCondition filter : filters) {
+            if (FiltersRegistry.getPossibleFilters()
+                    .stream()
+                    .anyMatch(f -> f.getFieldName().equals(filter.getFieldName()) &&
+                            f.getPossibleOperations().contains(filter.getOperator()))) {
+                continue;
+            } else {
+                notValidFilters.add(filter.getFieldName());
+            }
+        }
+
+        return notValidFilters;
+    }
+
+    public TelemetryResponse getTelemetryData(List<FilterCondition> filterConditions) {
+        TelemetryResponse response = new TelemetryResponse();
+        try (IDocumentSession session = DocumentStoreHolder.getStore().openSession()) {
+
+            IDocumentQuery<Machine> query = session.query(Machine.class);
+
+            for (FilterCondition condition : filterConditions) {
+                query = switch (condition.getOperator()) {
+                    case "Equals" -> query.whereEquals(condition.getFieldName(), condition.getValue());
+                    case "GreaterThan" -> query.whereGreaterThan(condition.getFieldName(), condition.getValue());
+                    case "LessThan" -> query.whereLessThan(condition.getFieldName(), condition.getValue());
+                    case "Contains" -> query.search(condition.getFieldName(), "*" + condition.getValue() + "*");
+                    default -> query;
+                };
+            }
+
+            List<Machine> results = query.toList();
+
+            for (Machine machine : results) {
+                if (machine instanceof Tractor tractor) {
+                    var tractorDto = new TractorDto();
+                    tractorDto.setMachineType("Tractor");
+                    tractorDto.setSerialNumber(tractor.getSerialNumber());
+                    response.getTractors().add(tractorDto);
+                } else if (machine instanceof Combine combine) {
+                    var combineDto = new CombineDto();
+                    combineDto.setMachineType("Combine");
+                    combineDto.setSerialNumber(combine.getSerialNumber());
+                    response.getCombines().add(combineDto);
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return response;
     }
 
     private List<?> readCsv(InputStream fileStream, String fileName) throws Exception {

@@ -1,5 +1,6 @@
 package com.logineko.TelemetryDataHub.model.domain;
 
+import com.logineko.TelemetryDataHub.model.csvModel.TractorData;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,4 +19,8 @@ public class Tractor extends Machine {
     private String transverseDifferentialLockStatus;
     private String allWheelDriveStatus;
     private String actualStatusOfCreeper;
+
+    public Tractor() {
+
+    }
 }

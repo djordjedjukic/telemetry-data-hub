@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class FilterCondition {
-    private String Key;
-    public String Operator;
-    public Object Value;
+    private String fieldName;
+    private String operator;
+    private Object value;
 }

@@ -1,11 +1,16 @@
 package com.logineko.TelemetryDataHub.controller;
 
+import com.logineko.TelemetryDataHub.model.dto.FilterCondition;
+import com.logineko.TelemetryDataHub.model.dto.telemetry.TelemetryResponse;
 import com.logineko.TelemetryDataHub.services.ITelemetryService;
 import com.logineko.TelemetryDataHub.utils.filter.FiltersRegistry;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RestController
 @AllArgsConstructor
@@ -38,5 +43,19 @@ public class TelemetryController {
     @GetMapping("/test")
     public ResponseEntity<?> getAll() {
         return ResponseEntity.ok(FiltersRegistry.getPossibleFilters());
+    }
+
+    @PostMapping("/filter")
+    public ResponseEntity<?> applyFilters(@RequestBody List<FilterCondition> filterConditions) {
+        var notValidFilters = telemetryService.validateFilters(filterConditions);
+
+        if (filterConditions.isEmpty()) {
+            return new ResponseEntity<>("No filters applied", HttpStatus.BAD_REQUEST);
+        } else if (!notValidFilters.isEmpty()) {
+            return new ResponseEntity<>("Invalid filters: " + String.join(", ", notValidFilters), HttpStatus.BAD_REQUEST);
+        } else {
+            TelemetryResponse response = telemetryService.getTelemetryData(filterConditions);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }
     }
 }

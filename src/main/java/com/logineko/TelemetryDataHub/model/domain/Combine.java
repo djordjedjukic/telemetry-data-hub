@@ -43,4 +43,8 @@ public class Combine extends Machine {
     private String quantimeterCalibrationFactor;
     private int separationSensitivity;
     private int sieveSensitivity;
+
+    public Combine() {
+
+    }
 }
