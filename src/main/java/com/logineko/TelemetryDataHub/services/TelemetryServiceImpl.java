@@ -91,7 +91,7 @@ public class TelemetryServiceImpl implements TelemetryService {
                 case "Equals" -> query.whereEquals(cond.getFieldName(), cond.getValue());
                 case "GreaterThan" -> query.whereGreaterThan(cond.getFieldName(), cond.getValue());
                 case "LessThan" -> query.whereLessThan(cond.getFieldName(), cond.getValue());
-                case "Contains" -> query.search(cond.getFieldName(), "*" + cond.getValue() + "*");
+                case "Contains" -> query.search(cond.getFieldName(), "*" + cond.getValue() + "*"); // this is expensive, but it works for now, way to go would be to write and index
                 default -> query;
             };
         }
