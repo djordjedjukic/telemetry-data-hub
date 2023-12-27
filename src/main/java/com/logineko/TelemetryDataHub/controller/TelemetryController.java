@@ -3,7 +3,7 @@ package com.logineko.TelemetryDataHub.controller;
 import com.logineko.TelemetryDataHub.model.dto.FilterCondition;
 import com.logineko.TelemetryDataHub.model.dto.telemetry.TelemetryResponse;
 import com.logineko.TelemetryDataHub.services.ITelemetryService;
-import com.logineko.TelemetryDataHub.utils.filter.FiltersRegistry;
+import com.logineko.TelemetryDataHub.infrastructure.filter.FiltersRegistry;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

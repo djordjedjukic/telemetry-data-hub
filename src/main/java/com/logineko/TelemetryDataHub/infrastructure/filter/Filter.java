@@ -1,4 +1,4 @@
-package com.logineko.TelemetryDataHub.utils.filter;
+package com.logineko.TelemetryDataHub.infrastructure.filter;
 
 import lombok.Getter;
 import lombok.Setter;

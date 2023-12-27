@@ -1,4 +1,4 @@
-package com.logineko.TelemetryDataHub.utils;
+package com.logineko.TelemetryDataHub.infrastructure;
 
 public class Constants {
 

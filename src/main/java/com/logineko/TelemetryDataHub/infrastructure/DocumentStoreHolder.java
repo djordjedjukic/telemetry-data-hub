@@ -1,4 +1,4 @@
-package com.logineko.TelemetryDataHub.utils;
+package com.logineko.TelemetryDataHub.infrastructure;
 
 import com.logineko.TelemetryDataHub.model.domain.Machine;
 import net.ravendb.client.documents.DocumentStore;
