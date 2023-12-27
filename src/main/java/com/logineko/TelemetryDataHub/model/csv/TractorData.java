@@ -1,5 +1,6 @@
-package com.logineko.TelemetryDataHub.model.csvModel;
+package com.logineko.TelemetryDataHub.model.csv;
 
+import com.logineko.TelemetryDataHub.model.domain.Tractor;
 import com.opencsv.bean.CsvBindByPosition;
 
 import lombok.Getter;
@@ -64,4 +65,24 @@ public class TractorData {
 
     @CsvBindByPosition(position = 18)
     private String actualStatusOfCreeper;
+
+    // Create domain model tractor from this csv
+    public Tractor createDomainModel() {
+        Tractor model = new Tractor();
+        model.setEngineLoad(engineLoad);
+        model.setEngineSpeed(engineSpeed);
+        model.setFuelConsumption(fuelConsumption);
+        model.setGroundSpeedGearbox(groundSpeedGearbox);
+        model.setGroundSpeedRadar(groundSpeedRadar);
+        model.setCoolantTemperature(coolantTemperature);
+        model.setSpeedFrontPTO(speedFrontPTO);
+        model.setSpeedRearPTO(speedRearPTO);
+        model.setCurrentGearShift(currentGearShift);
+        model.setAmbientTemperature(ambientTemperature);
+        model.setParkingBrakeStatus(parkingBrakeStatus);
+        model.setTransverseDifferentialLockStatus(transverseDifferentialLockStatus);
+        model.setAllWheelDriveStatus(allWheelDriveStatus);
+        model.setActualStatusOfCreeper(actualStatusOfCreeper);
+        return model;
+    }
 }

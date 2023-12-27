@@ -1,11 +1,9 @@
-package com.logineko.TelemetryDataHub.model.csvModel;
+package com.logineko.TelemetryDataHub.model.csv;
 
 import com.opencsv.bean.CsvBindByPosition;
 
 import lombok.Getter;
 import lombok.Setter;
-
-import java.time.LocalDateTime;
 
 @Getter
 @Setter

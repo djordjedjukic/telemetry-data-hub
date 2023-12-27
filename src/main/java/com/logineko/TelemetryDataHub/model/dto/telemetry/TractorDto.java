@@ -22,10 +22,10 @@ public class TractorDto {
     private double coolantTemperature;
     private int speedFrontPTO;
     private int speedRearPTO;
-    private String currentGearShift;
+    private int currentGearShift;
     private double ambientTemperature;
-    private String parkingBrakeStatus;
-    private String transverseDifferentialLockStatus;
-    private String allWheelDriveStatus;
-    private String actualStatusOfCreeper;
+    private int parkingBrakeStatus;
+    private int transverseDifferentialLockStatus;
+    private boolean allWheelDriveStatusActive;
+    private boolean actualStatusOfCreeperActive;
 }

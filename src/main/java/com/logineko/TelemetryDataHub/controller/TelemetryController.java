@@ -40,7 +40,7 @@ public class TelemetryController {
     }
 
 
-    @GetMapping("/test")
+    @GetMapping("/filters")
     public ResponseEntity<?> getAll() {
         return ResponseEntity.ok(telemetryService.getPossibleFilters());
     }
