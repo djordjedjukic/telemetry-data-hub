@@ -2,8 +2,7 @@ package com.logineko.TelemetryDataHub.controller;
 
 import com.logineko.TelemetryDataHub.model.dto.FilterCondition;
 import com.logineko.TelemetryDataHub.model.dto.telemetry.TelemetryResponse;
-import com.logineko.TelemetryDataHub.services.ITelemetryService;
-import com.logineko.TelemetryDataHub.infrastructure.filter.FiltersRegistry;
+import com.logineko.TelemetryDataHub.services.TelemetryService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +16,7 @@ import java.util.List;
 @RequestMapping("/api/telemetry")
 public class TelemetryController {
 
-    private final ITelemetryService telemetryService;
+    private final TelemetryService telemetryService;
 
     @PostMapping("/import")
     public ResponseEntity<?> importTelemetryData(@RequestParam("file") MultipartFile file) {
