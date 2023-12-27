@@ -26,7 +26,7 @@ I would add paging in filtering because now the result can contain a lot of data
 Clone the project
 
 ```bash
-  git clone https://link-to-project
+  git clone https://github.com/djordjedjukic/telemetry-data-hub.git
 ```
 
 Go to the project directory
