@@ -1,10 +1,18 @@
 package com.logineko.TelemetryDataHub.model.csv;
 
+import com.logineko.TelemetryDataHub.infrastructure.Constants;
 import com.logineko.TelemetryDataHub.model.domain.Tractor;
 import com.opencsv.bean.CsvBindByPosition;
+import org.apache.commons.lang3.math.NumberUtils;
 
 import lombok.Getter;
 import lombok.Setter;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
+import static com.logineko.TelemetryDataHub.infrastructure.Utils.parseDoubleOrZero;
+import static com.logineko.TelemetryDataHub.infrastructure.Utils.parseIntOrZero;
 
 @Getter
 @Setter
@@ -66,23 +74,35 @@ public class TractorData {
     @CsvBindByPosition(position = 18)
     private String actualStatusOfCreeper;
 
-    // Create domain model tractor from this csv
-    public Tractor createDomainModel() {
+    public Tractor toDomain() throws ParseException {
+        SimpleDateFormat format = new SimpleDateFormat("MMM dd, yyyy, hh:mm:ss a");
         Tractor model = new Tractor();
-        model.setEngineLoad(engineLoad);
-        model.setEngineSpeed(engineSpeed);
-        model.setFuelConsumption(fuelConsumption);
-        model.setGroundSpeedGearbox(groundSpeedGearbox);
-        model.setGroundSpeedRadar(groundSpeedRadar);
-        model.setCoolantTemperature(coolantTemperature);
-        model.setSpeedFrontPTO(speedFrontPTO);
-        model.setSpeedRearPTO(speedRearPTO);
-        model.setCurrentGearShift(currentGearShift);
-        model.setAmbientTemperature(ambientTemperature);
-        model.setParkingBrakeStatus(parkingBrakeStatus);
-        model.setTransverseDifferentialLockStatus(transverseDifferentialLockStatus);
-        model.setAllWheelDriveStatus(allWheelDriveStatus);
-        model.setActualStatusOfCreeper(actualStatusOfCreeper);
+        model.setMachineType(Constants.TRACTOR);
+        model.setTimestamp(format.parse(dateTime));
+        model.setSerialNumber(serialNumber);
+        model.setLatitude(parseDoubleOrZero(gpsLatitude));
+        model.setLongitude(parseDoubleOrZero(gpsLongitude));
+        model.setTotalWorkingHours(parseDoubleOrZero(totalWorkingHoursCounter));
+        model.setEngineLoad(parseDoubleOrZero(engineLoad));
+        model.setEngineSpeed(parseDoubleOrZero(engineSpeed));
+        model.setFuelConsumption(parseDoubleOrZero(fuelConsumption));
+        model.setGroundSpeedGearbox(parseDoubleOrZero(groundSpeedGearbox));
+        model.setGroundSpeedRadar(parseDoubleOrZero(groundSpeedRadar));
+        model.setCoolantTemperature(parseDoubleOrZero(coolantTemperature));
+        model.setSpeedFrontPTO(parseIntOrZero(speedFrontPTO));
+        model.setSpeedRearPTO(parseIntOrZero(speedRearPTO));
+        model.setCurrentGearShift(parseIntOrZero(currentGearShift));
+        model.setAmbientTemperature(parseDoubleOrZero(ambientTemperature));
+        model.setParkingBrakeStatus(parseIntOrZero(parkingBrakeStatus));
+        model.setTransverseDifferentialLockStatus(parseIntOrZero(transverseDifferentialLockStatus));
+        model.setAllWheelDriveStatusActive(isActiveStatus(allWheelDriveStatus));
+        model.setActualStatusOfCreeperActive(isActiveStatus(actualStatusOfCreeper));
         return model;
+    }
+
+
+
+    private boolean isActiveStatus(String status){
+        return "Active".equals(status);
     }
 }

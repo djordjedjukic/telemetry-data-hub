@@ -14,6 +14,7 @@ public class OperationsRegistry {
         operationsMap.put(double.class, Arrays.asList("Equals", "LessThan", "GreaterThan"));
         operationsMap.put(String.class, Arrays.asList("Equals", "Contains"));
         operationsMap.put(LocalDateTime.class, Arrays.asList("Equals", "LessThan", "GreaterThan"));
+        operationsMap.put(boolean.class, Arrays.asList("Equals"));
     }
 
     public static List<String> getOperationsForType(Class<?> type) {

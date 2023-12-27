@@ -19,13 +19,11 @@ import net.ravendb.client.documents.session.IDocumentQuery;
 import net.ravendb.client.documents.session.IDocumentSession;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.text.SimpleDateFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 public class TelemetryServiceImpl implements TelemetryService {
@@ -41,51 +39,20 @@ public class TelemetryServiceImpl implements TelemetryService {
 
     @Override
     public void importData(InputStream file, String fileName) throws Exception {
+        List<?> machineList = readCsv(file, fileName);
+        try (IDocumentSession docSession = store.openSession()) {
+            processMachineList(docSession, machineList, fileName);
+            docSession.saveChanges();
+        }
+    }
 
-        List<?> machines = readCsv(file, fileName);
-
-        machines = machines.subList(0, 2);
-        SimpleDateFormat formatter = new SimpleDateFormat("MMM dd, yyyy, hh:mm:ss a");
-
-
-        Machine machine = null;
-        try (IDocumentSession session = store.openSession()) {
+    private void processMachineList(IDocumentSession session, List<?> machineList, String fileName) throws ParseException {
+        for (Object obj : machineList) {
             if (fileName.startsWith(Constants.TRACTOR_DATA_FILE_NAME)) {
-                for (Object obj : machines) {
-                    TractorData data = (TractorData) obj;
-                    machine = new Tractor();
-                    machine.setMachineType("Tractor");
-                    machine.setEngineLoad(!Objects.equals(data.getEngineLoad(), "na") ? Double.parseDouble(data.getEngineLoad()) : null);
-                    machine.setEngineSpeed(Double.parseDouble(data.getEngineSpeed()));
-                    machine.setLatitude(Double.parseDouble(data.getGpsLatitude()));
-                    machine.setLongitude(Double.parseDouble(data.getGpsLongitude()));
-                    machine.setSerialNumber(data.getSerialNumber());
-                    machine.setTotalWorkingHours(Double.parseDouble(data.getTotalWorkingHoursCounter()));
-                    machine.setTimestamp(formatter.parse(data.getDateTime()));
-
-
-                    session.store(machine);
-
-                }
+                session.store(((TractorData) obj).toDomain());
             } else if (fileName.startsWith(Constants.COMBINE_DATA_FILE_NAME)) {
-                for (Object obj : machines) {
-                    CombineData data = (CombineData) obj;
-                    machine = new Combine();
-                    machine.setMachineType("Combine");
-                    machine.setEngineLoad(Double.parseDouble(data.getEngineLoad()));
-                    machine.setEngineSpeed(Double.parseDouble(data.getEngineSpeed()));
-                    machine.setLatitude(Double.parseDouble(data.getGpsLatitude()));
-                    machine.setLongitude(Double.parseDouble(data.getGpsLongitude()));
-                    machine.setSerialNumber(data.getSerialNumber());
-                    machine.setTotalWorkingHours(Double.parseDouble(data.getTotalWorkingHoursCounter()));
-                    machine.setTimestamp(formatter.parse(data.getDateTime()));
-
-                    session.store(machine);
-                }
+                session.store(((CombineData) obj).toDomain());
             }
-            session.saveChanges();
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 

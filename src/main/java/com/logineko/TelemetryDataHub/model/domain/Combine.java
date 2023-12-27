@@ -1,17 +1,20 @@
 package com.logineko.TelemetryDataHub.model.domain;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import org.hibernate.grammars.hql.HqlParser;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 public class Combine extends Machine {
     private double groundSpeed;
     private int drumSpeed;
     private int fanSpeed;
     private int rotorStrawWalkerSpeed;
-    private int separationLosses;
-    private int sieveLosses;
+    private double separationLosses;
+    private double sieveLosses;
     private boolean chopper;
-    private int dieselTankLevel;
+    private double dieselTankLevel;
     private int numberOfPartialWidths;
     private boolean frontAttachmentOnOff;
     private int maxNumberOfPartialWidths;
@@ -24,13 +27,13 @@ public class Combine extends Machine {
     private int lowerSievePosition;
     private boolean grainTank70;
     private boolean grainTank100;
-    private int grainMoistureContent;
+    private double grainMoistureContent;
     private double throughput;
     private int radialSpreaderSpeed;
     private int grainInReturns;
-    private int channelPosition;
+    private double channelPosition;
     private boolean yieldMeasurement;
-    private int returnsAugerMeasurement;
+    private double returnsAugerMeasurement;
     private boolean moistureMeasurement;
     private String typeOfCrop;
     private double specificCropWeight;
@@ -39,8 +42,8 @@ public class Combine extends Machine {
     private double rateOfWork;
     private double yield;
     private double quantimeterCalibrationFactor;
-    private int separationSensitivity;
-    private int sieveSensitivity;
+    private double separationSensitivity;
+    private double sieveSensitivity;
 
     public Combine() {
 

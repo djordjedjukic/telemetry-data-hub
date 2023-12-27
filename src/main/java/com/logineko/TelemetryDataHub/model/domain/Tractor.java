@@ -1,7 +1,9 @@
 package com.logineko.TelemetryDataHub.model.domain;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 public class Tractor extends Machine {
     private double fuelConsumption;

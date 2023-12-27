@@ -1,9 +1,16 @@
 package com.logineko.TelemetryDataHub.model.csv;
 
+import com.logineko.TelemetryDataHub.infrastructure.Constants;
+import com.logineko.TelemetryDataHub.model.domain.Combine;
 import com.opencsv.bean.CsvBindByPosition;
-
 import lombok.Getter;
 import lombok.Setter;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
+import static com.logineko.TelemetryDataHub.infrastructure.Utils.parseDoubleOrZero;
+import static com.logineko.TelemetryDataHub.infrastructure.Utils.parseIntOrZero;
 
 @Getter
 @Setter
@@ -135,8 +142,64 @@ public class CombineData {
     private String quantimeterCalibrationFactor;
 
     @CsvBindByPosition(position = 42)
-    private String   separationSensitivity;
+    private String separationSensitivity;
 
     @CsvBindByPosition(position = 43)
     private String sieveSensitivity;
+
+    public Combine toDomain() throws ParseException {
+        SimpleDateFormat format = new SimpleDateFormat("MMM dd, yyyy, hh:mm:ss a");
+        Combine model = new Combine();
+        model.setMachineType(Constants.COMBINE);
+        model.setTimestamp(format.parse(dateTime));
+        model.setSerialNumber(serialNumber);
+        model.setLongitude(parseDoubleOrZero(gpsLongitude));
+        model.setLatitude(parseDoubleOrZero(gpsLatitude));
+        model.setTotalWorkingHours(parseDoubleOrZero(totalWorkingHoursCounter));
+        model.setGroundSpeed(parseDoubleOrZero(groundSpeed));
+        model.setEngineSpeed(parseDoubleOrZero(engineSpeed));
+        model.setEngineLoad(parseDoubleOrZero(engineLoad));
+        model.setDrumSpeed(parseIntOrZero(drumSpeed));
+        model.setFanSpeed(parseIntOrZero(fanSpeed));
+        model.setRotorStrawWalkerSpeed(parseIntOrZero(rotorStrawWalkerSpeed));
+        model.setSeparationLosses(parseDoubleOrZero(separationLosses));
+        model.setSieveLosses(parseDoubleOrZero(sieveLosses));
+        model.setChopper(isOn(chopper));
+        model.setDieselTankLevel(parseDoubleOrZero(dieselTankLevel));
+        model.setNumberOfPartialWidths(parseIntOrZero(numberOfPartialWidths));
+        model.setFrontAttachmentOnOff(isOn(frontAttachmentOnOff));
+        model.setMaxNumberOfPartialWidths(parseIntOrZero(maxNumberOfPartialWidths));
+        model.setFeedRakeSpeed(parseIntOrZero(feedRakeSpeed));
+        model.setWorkingPosition(isOn(workingPosition));
+        model.setGrainTankUnloading(isOn(grainTankUnloading));
+        model.setMainDriveStatus(isOn(mainDriveStatus));
+        model.setConcavePosition(parseIntOrZero(concavePosition));
+        model.setUpperSievePosition(parseIntOrZero(upperSievePosition));
+        model.setLowerSievePosition(parseIntOrZero(lowerSievePosition));
+        model.setGrainTank70(isOn(grainTank70));
+        model.setGrainTank100(isOn(grainTank100));
+        model.setGrainMoistureContent(parseDoubleOrZero(grainMoistureContent));
+        model.setThroughput(parseDoubleOrZero(throughput));
+        model.setRadialSpreaderSpeed(parseIntOrZero(radialSpreaderSpeed));
+        model.setGrainInReturns(parseIntOrZero(grainInReturns));
+        model.setChannelPosition(parseDoubleOrZero(channelPosition));
+        model.setYieldMeasurement(isOn(yieldMeasurement));
+        model.setReturnsAugerMeasurement(parseDoubleOrZero(returnsAugerMeasurement));
+        model.setMoistureMeasurement(isOn(moistureMeasurement));
+        model.setTypeOfCrop(typeOfCrop);
+        model.setSpecificCropWeight(parseDoubleOrZero(specificCropWeight));
+        model.setAutoPilotStatus(isOn(autoPilotStatus));
+        model.setCruisePilotStatus(parseDoubleOrZero(cruisePilotStatus));
+        model.setRateOfWork(parseDoubleOrZero(rateOfWork));
+        model.setYield(parseDoubleOrZero(yield));
+        model.setQuantimeterCalibrationFactor(parseDoubleOrZero(quantimeterCalibrationFactor));
+        model.setSeparationSensitivity(parseIntOrZero(separationSensitivity));
+        model.setSieveSensitivity(parseIntOrZero(sieveSensitivity));
+
+        return model;
+    }
+
+    private boolean isOn(String status) {
+        return "on".equals(status);
+    }
 }
