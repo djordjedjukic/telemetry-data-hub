@@ -1,10 +1,10 @@
 package com.logineko.TelemetryDataHub.services;
 
+import com.logineko.TelemetryDataHub.model.csvModel.CombineData;
+import com.logineko.TelemetryDataHub.model.csvModel.TractorData;
 import com.logineko.TelemetryDataHub.model.domain.Combine;
 import com.logineko.TelemetryDataHub.model.domain.Machine;
 import com.logineko.TelemetryDataHub.model.domain.Tractor;
-import com.logineko.TelemetryDataHub.model.csvModel.CombineData;
-import com.logineko.TelemetryDataHub.model.csvModel.TractorData;
 import com.logineko.TelemetryDataHub.model.dto.FilterCondition;
 import com.logineko.TelemetryDataHub.model.dto.telemetry.CombineDto;
 import com.logineko.TelemetryDataHub.model.dto.telemetry.TelemetryResponse;
@@ -16,17 +16,14 @@ import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 import net.ravendb.client.documents.session.IDocumentQuery;
 import net.ravendb.client.documents.session.IDocumentSession;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class TelemetryService implements ITelemetryService {
@@ -47,13 +44,15 @@ public class TelemetryService implements ITelemetryService {
                     TractorData data = (TractorData) obj;
                     machine = new Tractor();
                     machine.setMachineType("Tractor");
-                    machine.setEngineLoad(Double.parseDouble(data.getEngineLoad()));
+                    machine.setEngineLoad(!Objects.equals(data.getEngineLoad(), "na") ? Double.parseDouble(data.getEngineLoad()) : null);
                     machine.setEngineSpeed(Double.parseDouble(data.getEngineSpeed()));
                     machine.setLatitude(Double.parseDouble(data.getGpsLatitude()));
                     machine.setLongitude(Double.parseDouble(data.getGpsLongitude()));
                     machine.setSerialNumber(data.getSerialNumber());
                     machine.setTotalWorkingHours(Double.parseDouble(data.getTotalWorkingHoursCounter()));
                     machine.setTimestamp(formatter.parse(data.getDateTime()));
+
+
 
                     session.store(machine);
 
