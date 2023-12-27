@@ -10,11 +10,11 @@ import java.util.List;
 public class Filter {
     private String FriendlyName;
     private String FieldName;
-    private List<String> PossibleOperations;
+    private List<String> ApplicableOperations;
 
     public Filter(String friendlyName, String fieldName, List<String> possibleOperations) {
         this.FriendlyName = friendlyName;
         this.FieldName = fieldName;
-        this.PossibleOperations = possibleOperations;
+        this.ApplicableOperations = possibleOperations;
     }
 }

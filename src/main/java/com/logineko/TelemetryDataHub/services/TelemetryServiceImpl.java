@@ -100,7 +100,7 @@ public class TelemetryServiceImpl implements TelemetryService {
             if (filtersRegistry.getPossibleFilters()
                     .stream()
                     .anyMatch(f -> f.getFieldName().equals(filter.getFieldName()) &&
-                            f.getPossibleOperations().contains(filter.getOperator()))) {
+                            f.getApplicableOperations().contains(filter.getOperator()))) {
                 continue;
             } else {
                 notValidFilters.add(filter.getFieldName());
