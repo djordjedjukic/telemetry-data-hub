@@ -1,6 +1,8 @@
 package com.logineko.TelemetryDataHub.services;
 
+import com.logineko.TelemetryDataHub.infrastructure.Constants;
 import com.logineko.TelemetryDataHub.infrastructure.filter.Filter;
+import com.logineko.TelemetryDataHub.infrastructure.filter.FiltersRegistry;
 import com.logineko.TelemetryDataHub.model.csvModel.CombineData;
 import com.logineko.TelemetryDataHub.model.csvModel.TractorData;
 import com.logineko.TelemetryDataHub.model.domain.Combine;
@@ -10,13 +12,12 @@ import com.logineko.TelemetryDataHub.model.dto.FilterCondition;
 import com.logineko.TelemetryDataHub.model.dto.telemetry.CombineDto;
 import com.logineko.TelemetryDataHub.model.dto.telemetry.TelemetryResponse;
 import com.logineko.TelemetryDataHub.model.dto.telemetry.TractorDto;
-import com.logineko.TelemetryDataHub.infrastructure.Constants;
-import com.logineko.TelemetryDataHub.infrastructure.filter.FiltersRegistry;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 import net.ravendb.client.documents.IDocumentStore;
 import net.ravendb.client.documents.session.IDocumentQuery;
 import net.ravendb.client.documents.session.IDocumentSession;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
@@ -63,7 +64,6 @@ public class TelemetryServiceImpl implements TelemetryService {
                     machine.setTimestamp(formatter.parse(data.getDateTime()));
 
 
-
                     session.store(machine);
 
                 }
@@ -97,10 +97,7 @@ public class TelemetryServiceImpl implements TelemetryService {
         var notValidFilters = new ArrayList<String>();
 
         for (FilterCondition filter : filters) {
-            if (filtersRegistry.getPossibleFilters()
-                    .stream()
-                    .anyMatch(f -> f.getFieldName().equals(filter.getFieldName()) &&
-                            f.getApplicableOperations().contains(filter.getOperator()))) {
+            if (filtersRegistry.getPossibleFilters().stream().anyMatch(f -> f.getFieldName().equals(filter.getFieldName()) && f.getApplicableOperations().contains(filter.getOperator()))) {
                 continue;
             } else {
                 notValidFilters.add(filter.getFieldName());
@@ -110,42 +107,39 @@ public class TelemetryServiceImpl implements TelemetryService {
         return notValidFilters;
     }
 
-    public TelemetryResponse getTelemetryData(List<FilterCondition> filterConditions) {
+    public TelemetryResponse fetchTelemetry(List<FilterCondition> filters) {
         TelemetryResponse response = new TelemetryResponse();
         try (IDocumentSession session = store.openSession()) {
-
             IDocumentQuery<Machine> query = session.query(Machine.class);
-
-            for (FilterCondition condition : filterConditions) {
-                query = switch (condition.getOperator()) {
-                    case "Equals" -> query.whereEquals(condition.getFieldName(), condition.getValue());
-                    case "GreaterThan" -> query.whereGreaterThan(condition.getFieldName(), condition.getValue());
-                    case "LessThan" -> query.whereLessThan(condition.getFieldName(), condition.getValue());
-                    case "Contains" -> query.search(condition.getFieldName(), "*" + condition.getValue() + "*");
-                    default -> query;
-                };
-            }
-
-            List<Machine> results = query.toList();
-
-            for (Machine machine : results) {
-                if (machine instanceof Tractor tractor) {
-                    var tractorDto = new TractorDto();
-                    tractorDto.setMachineType("Tractor");
-                    tractorDto.setSerialNumber(tractor.getSerialNumber());
-                    response.getTractors().add(tractorDto);
-                } else if (machine instanceof Combine combine) {
-                    var combineDto = new CombineDto();
-                    combineDto.setMachineType("Combine");
-                    combineDto.setSerialNumber(combine.getSerialNumber());
-                    response.getCombines().add(combineDto);
-                }
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
+            query = applyFilters(query, filters);
+            List<Machine> machines = query.toList();
+            processMachines(response, machines);
         }
         return response;
+    }
+
+    private IDocumentQuery<Machine> applyFilters(IDocumentQuery<Machine> query, List<FilterCondition> filters) {
+        for (FilterCondition cond : filters) {
+            query = switch (cond.getOperator()) {
+                case "Equals" -> query.whereEquals(cond.getFieldName(), cond.getValue());
+                case "GreaterThan" -> query.whereGreaterThan(cond.getFieldName(), cond.getValue());
+                case "LessThan" -> query.whereLessThan(cond.getFieldName(), cond.getValue());
+                case "Contains" -> query.search(cond.getFieldName(), "*" + cond.getValue() + "*");
+                default -> query;
+            };
+        }
+        return query;
+    }
+
+    private void processMachines(TelemetryResponse resp, List<Machine> machines) {
+        ModelMapper mapper = new ModelMapper();
+        for (Machine m : machines) {
+            if (m instanceof Tractor tractor) {
+                resp.getTractors().add(mapper.map(tractor, TractorDto.class));
+            } else if (m instanceof Combine combine) {
+                resp.getCombines().add(mapper.map(combine, CombineDto.class));
+            }
+        }
     }
 
     private List<?> readCsv(InputStream fileStream, String fileName) throws Exception {

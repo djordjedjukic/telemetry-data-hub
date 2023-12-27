@@ -54,7 +54,7 @@ public class TelemetryController {
         } else if (!notValidFilters.isEmpty()) {
             return new ResponseEntity<>("Invalid filters: " + String.join(", ", notValidFilters), HttpStatus.BAD_REQUEST);
         } else {
-            TelemetryResponse response = telemetryService.getTelemetryData(filterConditions);
+            TelemetryResponse response = telemetryService.fetchTelemetry(filterConditions);
             return ResponseEntity.ok(response);
         }
     }
