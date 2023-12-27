@@ -9,6 +9,6 @@ import java.time.LocalDateTime;
 @Setter
 public class FilterCondition {
     private String fieldName;
-    private String operator;
+    private String operator = "Equals";
     private Object value;
 }
