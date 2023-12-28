@@ -1,9 +1,7 @@
-package com.logineko.TelemetryDataHub.model.dto;
+package com.logineko.telemetrydatahub.model.dto;
 
 import lombok.Getter;
 import lombok.Setter;
-
-import java.time.LocalDateTime;
 
 @Getter
 @Setter

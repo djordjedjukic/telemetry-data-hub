@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.logineko</groupId>
-	<artifactId>TelemetryDataHub</artifactId>
+	<artifactId>telemetrydatahub</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>TelemetryDataHub</name>
 	<description>Demo project for Spring Boot</description>
@@ -81,6 +81,10 @@
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
 			<version>3.14.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-log4j2</artifactId>
 		</dependency>
 	</dependencies>
 

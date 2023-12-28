@@ -1,8 +1,7 @@
-package com.logineko.TelemetryDataHub.model.domain;
+package com.logineko.telemetrydatahub.model.domain;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.hibernate.grammars.hql.HqlParser;
 
 @EqualsAndHashCode(callSuper = true)
 @Data

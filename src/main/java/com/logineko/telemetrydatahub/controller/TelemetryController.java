@@ -1,8 +1,8 @@
-package com.logineko.TelemetryDataHub.controller;
+package com.logineko.telemetrydatahub.controller;
 
-import com.logineko.TelemetryDataHub.model.dto.FilterCondition;
-import com.logineko.TelemetryDataHub.model.dto.telemetry.TelemetryResponse;
-import com.logineko.TelemetryDataHub.services.TelemetryService;
+import com.logineko.telemetrydatahub.model.dto.FilterCondition;
+import com.logineko.telemetrydatahub.model.dto.telemetry.TelemetryResponse;
+import com.logineko.telemetrydatahub.services.TelemetryService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

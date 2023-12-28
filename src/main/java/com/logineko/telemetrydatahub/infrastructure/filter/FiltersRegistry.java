@@ -1,8 +1,8 @@
-package com.logineko.TelemetryDataHub.infrastructure.filter;
+package com.logineko.telemetrydatahub.infrastructure.filter;
 
-import com.logineko.TelemetryDataHub.model.domain.Combine;
-import com.logineko.TelemetryDataHub.model.domain.Machine;
-import com.logineko.TelemetryDataHub.model.domain.Tractor;
+import com.logineko.telemetrydatahub.model.domain.Combine;
+import com.logineko.telemetrydatahub.model.domain.Machine;
+import com.logineko.telemetrydatahub.model.domain.Tractor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

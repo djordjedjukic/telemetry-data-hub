@@ -1,8 +1,8 @@
-package com.logineko.TelemetryDataHub.services;
+package com.logineko.telemetrydatahub.services;
 
-import com.logineko.TelemetryDataHub.infrastructure.filter.Filter;
-import com.logineko.TelemetryDataHub.model.dto.FilterCondition;
-import com.logineko.TelemetryDataHub.model.dto.telemetry.TelemetryResponse;
+import com.logineko.telemetrydatahub.infrastructure.filter.Filter;
+import com.logineko.telemetrydatahub.model.dto.FilterCondition;
+import com.logineko.telemetrydatahub.model.dto.telemetry.TelemetryResponse;
 
 import java.io.InputStream;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.logineko.TelemetryDataHub.model.dto.telemetry;
+package com.logineko.telemetrydatahub.model.dto.telemetry;
 
 import lombok.Getter;
 import lombok.Setter;

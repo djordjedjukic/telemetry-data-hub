@@ -1,4 +1,4 @@
-package com.logineko.TelemetryDataHub.model.domain;
+package com.logineko.telemetrydatahub.model.domain;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

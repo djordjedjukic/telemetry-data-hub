@@ -1,4 +1,4 @@
-package com.logineko.TelemetryDataHub;
+package com.logineko.telemetrydatahub;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

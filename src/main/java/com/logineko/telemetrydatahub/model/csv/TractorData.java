@@ -1,9 +1,8 @@
-package com.logineko.TelemetryDataHub.model.csv;
+package com.logineko.telemetrydatahub.model.csv;
 
-import com.logineko.TelemetryDataHub.infrastructure.Constants;
-import com.logineko.TelemetryDataHub.model.domain.Tractor;
+import com.logineko.telemetrydatahub.infrastructure.Constants;
+import com.logineko.telemetrydatahub.model.domain.Tractor;
 import com.opencsv.bean.CsvBindByPosition;
-import org.apache.commons.lang3.math.NumberUtils;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -11,8 +10,8 @@ import lombok.Setter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
-import static com.logineko.TelemetryDataHub.infrastructure.Utils.parseDoubleOrZero;
-import static com.logineko.TelemetryDataHub.infrastructure.Utils.parseIntOrZero;
+import static com.logineko.telemetrydatahub.infrastructure.Utils.parseDoubleOrZero;
+import static com.logineko.telemetrydatahub.infrastructure.Utils.parseIntOrZero;
 
 @Getter
 @Setter

@@ -1,4 +1,4 @@
-package com.logineko.TelemetryDataHub.infrastructure;
+package com.logineko.telemetrydatahub.infrastructure;
 
 import org.apache.commons.lang3.math.NumberUtils;
 

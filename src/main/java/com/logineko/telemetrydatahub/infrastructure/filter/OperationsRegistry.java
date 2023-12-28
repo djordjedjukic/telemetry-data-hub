@@ -1,4 +1,4 @@
-package com.logineko.TelemetryDataHub.infrastructure.filter;
+package com.logineko.telemetrydatahub.infrastructure.filter;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
