@@ -14,6 +14,9 @@ RavenDB indexes are very powerful, but I skipped it for this purpose, filtering 
 
 I would add paging in filtering because now the result can contain a lot of data.
 
+I am using test instance for raven and you can see the data here, after you run the project:
+http://live-test.ravendb.net/studio/index.html#databases/documents?&database=telemetry-test
+
 
 
 ## Tech Stack
