@@ -18,7 +18,7 @@ public class DocumentStoreHolder {
     }
 
     private static class DocumentStoreContainer {
-        public static final IDocumentStore store = new DocumentStore("http://localhost:8082", "LoginEko");
+        public static final IDocumentStore store = new DocumentStore("http://live-test.ravendb.net", "telemetry-test");
 
         static {
             DocumentConventions conventions = store.getConventions();
@@ -35,10 +35,10 @@ public class DocumentStoreHolder {
             // Create database
             // I wouldn't do this in real production code, this is just to be easier to test
             try {
-                var operation = new GetDatabaseRecordOperation("LoginEko");
+                var operation = new GetDatabaseRecordOperation("telemetry-test");
                 var databaseRecord = store.maintenance().server().send(operation);
                 if (databaseRecord == null) {
-                    store.maintenance().server().send(new CreateDatabaseOperation(new DatabaseRecord("LoginEko")));
+                    store.maintenance().server().send(new CreateDatabaseOperation(new DatabaseRecord("telemetry-test")));
                 }
             } catch (Exception e) {
                 e.printStackTrace();
