@@ -32,7 +32,7 @@ Clone the project
 Go to the project directory
 
 ```bash
-  cd my-project
+  cd telemetry-data-hub
 ```
 
 Start the server
