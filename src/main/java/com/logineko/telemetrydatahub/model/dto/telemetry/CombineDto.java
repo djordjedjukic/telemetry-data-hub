@@ -8,7 +8,6 @@ import java.util.Date;
 @Getter
 @Setter
 public class CombineDto {
-    private String machineType;
     private Date timestamp;
     private String serialNumber;
     private double longitude;

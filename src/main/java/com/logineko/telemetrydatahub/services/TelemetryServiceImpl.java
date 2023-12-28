@@ -1,6 +1,7 @@
 package com.logineko.telemetrydatahub.services;
 
 import com.logineko.telemetrydatahub.infrastructure.Constants;
+import com.logineko.telemetrydatahub.infrastructure.Operator;
 import com.logineko.telemetrydatahub.infrastructure.filter.Filter;
 import com.logineko.telemetrydatahub.infrastructure.filter.FiltersRegistry;
 import com.logineko.telemetrydatahub.model.csv.CombineData;
@@ -87,11 +88,11 @@ public class TelemetryServiceImpl implements TelemetryService {
 
     private IDocumentQuery<Machine> applyFilters(IDocumentQuery<Machine> query, List<FilterCondition> filters) {
         for (FilterCondition cond : filters) {
-            query = switch (cond.getOperator()) {
-                case "Equals" -> query.whereEquals(cond.getFieldName(), cond.getValue());
-                case "GreaterThan" -> query.whereGreaterThan(cond.getFieldName(), cond.getValue());
-                case "LessThan" -> query.whereLessThan(cond.getFieldName(), cond.getValue());
-                case "Contains" -> query.search(cond.getFieldName(), "*" + cond.getValue() + "*"); // this is expensive, but it works for now, way to go would be to write and index
+            query = switch (Operator.valueOf(cond.getOperator())) {
+                case Equals -> query.whereEquals(cond.getFieldName(), cond.getValue());
+                case GreaterThan -> query.whereGreaterThan(cond.getFieldName(), cond.getValue());
+                case LessThan -> query.whereLessThan(cond.getFieldName(), cond.getValue());
+                case Contains -> query.search(cond.getFieldName(), "*" + cond.getValue() + "*"); // this is expensive, but it works for now, way to go would be to write and index
                 default -> query;
             };
         }
