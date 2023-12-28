@@ -14,6 +14,11 @@ RavenDB indexes are very powerful, but I skipped it for this purpose, filtering 
 
 I would add paging in filtering because now the result can contain a lot of data.
 
+Dependency injection is something that can be improved. 
+
+I am using test instance for raven and you can see the data here, after you run the project:
+http://live-test.ravendb.net/studio/index.html#databases/documents?&database=telemetry-test
+
 
 
 ## Tech Stack
@@ -44,3 +49,54 @@ Start the server
 ```bash
   mvn spring-boot:run
 ```
+
+## API Reference
+
+#### Import telemetry data
+
+```http
+  POST /api/telemetry/import
+```
+
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `file` | `MultipartFile` | CSV file you want to import |
+
+#### Get all applicable filters
+
+```http
+  GET /api/telemetry/filters
+```
+
+#### Filter telemetry data
+
+```http
+  POST /api/telemetry/filter
+```
+
+The request body should be a JSON array of filter conditions. Each filter condition should have the following structure:
+
+| Key       | Type     | Description                            |
+| :-------- | :------- | :------------------------------------- |
+| `fieldName`   | `string` | The name of the field to filter on. |
+| `operator`| `string` | The operator to use for the filter (e.g., 'Equals', 'GreaterThan', 'LessThan', 'Contains'). |
+| `value`   | `string` | The value to use for comparison. |
+
+### Example
+
+```json
+POST /api/telemetry/filter
+Content-Type: application/json
+
+[
+    {
+        "fieldName": "engineSpeed",
+        "operator": "GreaterThan",
+        "value": 1000
+    },
+    {
+        "fieldName": "serialNumber",
+        "operator": "Equals",
+        "value": "A5305041"
+    }
+]
