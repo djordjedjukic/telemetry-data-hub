@@ -20,6 +20,10 @@ I would add paging in filtering because now the result can contain a lot of data
 
 **Server:** Java, RavenDB
 
+## Prerequisites
+
+- Java 17+
+- Maven 3+
 
 ## Run Locally
 
