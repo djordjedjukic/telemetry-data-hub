@@ -60,7 +60,7 @@ Start the server
 
 | Parameter | Type     | Description                |
 | :-------- | :------- | :------------------------- |
-| `file` | `csv file` | CSV file you want to import |
+| `file` | `MultipartFile` | CSV file you want to import |
 
 #### Get all applicable filters
 
