@@ -48,10 +48,7 @@ public class TelemetryController {
     @PostMapping("/filter")
     public ResponseEntity<?> applyFilters(@RequestBody List<FilterCondition> filterConditions) {
         var notValidFilters = telemetryService.validateFilters(filterConditions);
-
-        if (filterConditions.isEmpty()) {
-            return new ResponseEntity<>("No filters applied", HttpStatus.BAD_REQUEST);
-        } else if (!notValidFilters.isEmpty()) {
+        if (!notValidFilters.isEmpty()) {
             return new ResponseEntity<>("Invalid filters: " + String.join(", ", notValidFilters), HttpStatus.BAD_REQUEST);
         } else {
             TelemetryResponse response = telemetryService.fetchTelemetry(filterConditions);
