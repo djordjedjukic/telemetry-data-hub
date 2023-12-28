@@ -28,7 +28,7 @@ public class DocumentStoreHolder {
     }
 
     @Bean
-    public static IDocumentStore getStore() {
+    public IDocumentStore getStore() {
         return DocumentStoreContainer.store;
     }
 }

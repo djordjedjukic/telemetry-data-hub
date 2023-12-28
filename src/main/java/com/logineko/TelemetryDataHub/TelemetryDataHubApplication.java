@@ -5,8 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 
-@EntityScan(basePackages = "com.logineko.TelemetryDataHub")
-@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class}, scanBasePackages = "com.logineko.TelemetryDataHub")
+@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
 public class TelemetryDataHubApplication {
 
 	public static void main(String[] args) {
