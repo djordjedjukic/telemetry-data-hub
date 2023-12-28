@@ -35,14 +35,8 @@ Go to the project directory
   cd my-project
 ```
 
-Install dependencies
-
-```bash
-  npm install
-```
-
 Start the server
 
 ```bash
-  npm run start
+  mvn spring-boot:run
 ```
