@@ -56,6 +56,12 @@ Start the server
 
 ## API Reference
 
+#### Get all applicable filters
+
+```http
+  GET /api/telemetry/filters
+```
+
 #### Import telemetry data
 
 ```http
@@ -65,12 +71,6 @@ Start the server
 | Parameter | Type     | Description                |
 | :-------- | :------- | :------------------------- |
 | `file` | `MultipartFile` | CSV file you want to import |
-
-#### Get all applicable filters
-
-```http
-  GET /api/telemetry/filters
-```
 
 #### Filter telemetry data
 
