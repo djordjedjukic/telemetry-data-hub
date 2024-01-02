@@ -65,7 +65,7 @@ public class TelemetryServiceImpl implements TelemetryService {
         var notValidFilters = new ArrayList<String>();
 
         for (FilterCondition filter : filters) {
-            if (filtersRegistry.getPossibleFilters().stream().anyMatch(f -> f.getFieldName().equals(filter.getFieldName()) && f.getApplicableOperations().contains(filter.getOperator()))) {
+            if (filtersRegistry.getPossibleFilters().stream().anyMatch(f -> f.getFieldName().equals(filter.getFieldName()) && f.getApplicableOperations().contains(filter.getOperator().toUpperCase()))) {
                 continue;
             } else {
                 notValidFilters.add(filter.getFieldName());
@@ -88,11 +88,11 @@ public class TelemetryServiceImpl implements TelemetryService {
 
     private IDocumentQuery<Machine> applyFilters(IDocumentQuery<Machine> query, List<FilterCondition> filters) {
         for (FilterCondition cond : filters) {
-            query = switch (Operator.valueOf(cond.getOperator())) {
-                case Equals -> query.whereEquals(cond.getFieldName(), cond.getValue());
-                case GreaterThan -> query.whereGreaterThan(cond.getFieldName(), cond.getValue());
-                case LessThan -> query.whereLessThan(cond.getFieldName(), cond.getValue());
-                case Contains -> query.search(cond.getFieldName(), "*" + cond.getValue() + "*"); // this is expensive, but it works for now, way to go would be to write and index
+            query = switch (Operator.valueOf(cond.getOperator().toUpperCase())) {
+                case EQUALS -> query.whereEquals(cond.getFieldName(), cond.getValue());
+                case GREATERTHAN -> query.whereGreaterThan(cond.getFieldName(), cond.getValue());
+                case LESSTHAN -> query.whereLessThan(cond.getFieldName(), cond.getValue());
+                case CONTAINS -> query.search(cond.getFieldName(), "*" + cond.getValue() + "*"); // this is expensive, but it works for now, way to go would be to write and index
                 default -> query;
             };
         }
