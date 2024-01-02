@@ -31,7 +31,7 @@ public class TelemetryController {
         try {
             String fileName = file.getOriginalFilename();
             telemetryService.importData(file.getInputStream(), fileName);
-            return new ResponseEntity<>("File uploaded successfully: " + fileName, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("File uploaded successfully: " + fileName, HttpStatus.OK);
 
         } catch (Exception e) {
             e.printStackTrace();
