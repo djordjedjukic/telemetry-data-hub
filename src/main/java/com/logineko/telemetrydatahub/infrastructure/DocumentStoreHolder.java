@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class DocumentStoreHolder {
     @Bean
-    public static IDocumentStore getStore() {
+    public IDocumentStore getStore() {
         return DocumentStoreContainer.store;
     }
 
